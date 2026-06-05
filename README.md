@@ -1,110 +1,102 @@
-# 🌍 CO₂ Weekly Trends Dashboard
+# 🌍 NOAA CO₂ Weekly Trends Dashboard
 
 **Course:** Exploratory Data Analysis  
 **Instructor:** Ali Hassan Sherazi  
-**Submission:** 05-June-2026 | Portal Submission  
-**Dataset:** `co2_weekly_mlo.csv` — NOAA Mauna Loa Weekly CO₂ (1974–2026)
+**Dataset:** `co2_weekly_mlo.csv` — NOAA Weekly CO₂ Readings, Mauna Loa Observatory (1974–2026)  
+**Submission Date:** 05-June-2026
 
 ---
 
-## Project Overview
+## 📌 Project Overview
 
-An interactive data visualization dashboard that explores 52 years of weekly
-atmospheric CO₂ measurements from the Mauna Loa Observatory, Hawaii.  
-Built with **Python, Pandas, Matplotlib, Seaborn, and Streamlit**.
+This dashboard visualizes over 50 years of atmospheric CO₂ measurements from Mauna Loa, Hawaii. It provides interactive filtering, 10 professional chart types, and KPI summary cards — all built with Python, Pandas, Matplotlib, Seaborn, and Streamlit.
 
 ---
 
-## Folder Structure
+## ⚙️ Installation
+
+1. **Clone / unzip** the project folder.
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Run the dashboard:**
+   ```bash
+   streamlit run app.py
+   ```
+4. Open your browser at `http://localhost:8501`
+
+> ⚠️ Make sure the file `data/co2_weekly_mlo.csv` is present. Do **not** rename it.
+
+---
+
+## 📁 Folder Structure
 
 ```
 dashboard_project/
 ├── data/
-│   └── co2_weekly_mlo.csv        ← EXACT original filename (DO NOT rename)
+│   └── co2_weekly_mlo.csv          ← Original dataset (do not rename)
 ├── notebooks/
-│   └── analysis.ipynb            ← EDA notebook
-├── app.py                        ← Main Streamlit dashboard
-├── charts.py                     ← All 10 chart functions
-├── filters.py                    ← Data loading, cleaning & filter logic
-├── requirements.txt              ← Python dependencies
-└── README.md
+│   └── analysis.ipynb              ← EDA notebook
+├── app.py                          ← Main Streamlit dashboard
+├── charts.py                       ← All 10 chart functions
+├── filters.py                      ← Data loading, cleaning, filter logic
+├── requirements.txt                ← Python dependencies
+└── README.md                       ← This file
 ```
 
 ---
 
-## Setup & Run
+## 🗂 Dataset Description
 
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
+| Column | Description |
+|--------|-------------|
+| `year`, `month`, `day` | Date of reading |
+| `decimal` | Decimal year (e.g., 1974.38) |
+| `average` | Weekly mean CO₂ in ppm |
+| `ndays` | Number of days contributing to reading |
+| `1 year ago` | CO₂ reading from 365 days ago |
+| `10 years ago` | CO₂ reading from ~10 years ago |
+| `increase since 1800` | Estimated rise from pre-industrial baseline |
 
-# 2. Launch dashboard
-streamlit run app.py
-```
-
-Opens at **http://localhost:8501** in your browser automatically.
-
----
-
-## All 10 Required Charts
-
-| # | Chart | What it shows |
-|---|-------|--------------|
-| 1 | Pie Chart | Proportion of readings per season |
-| 2 | Histogram | Frequency distribution of weekly CO₂ (ppm) |
-| 3 | Line Chart | CO₂ trend week-by-week from 1974 to 2026 |
-| 4 | Bar Chart | Average CO₂ concentration per decade |
-| 5 | Scatter Plot | CO₂ average vs. increase since 1800 |
-| 6 | Box Plot | CO₂ spread, median & outliers per season |
-| 7 | Heatmap | Correlation matrix of all numeric features |
-| 8 | Area Chart | Cumulative CO₂ rise shown as filled area |
-| 9 | Count Plot | Number of readings recorded per season |
-| 10 | Violin Plot | Full CO₂ distribution + density per decade |
+Sentinel value `-999.99` = missing data (replaced with NaN during cleaning).
 
 ---
 
-## All 6 Required Filters (all linked to all charts)
+## 📊 Charts Included
 
-| Filter | Type | Description |
-|--------|------|-------------|
-| Year Range | Slider | Filter by year (1974–2026) |
-| Season | Multi-select | Spring / Summer / Autumn / Winter |
-| CO₂ Level | Range slider | Filter by ppm concentration |
-| Decade | Dropdown | Focus on a single decade |
-| Search Year | Text input | Type any year to isolate it |
-| Reset | Button | Clears all filters to defaults |
-
----
-
-## Data Cleaning Steps (Pandas)
-
-1. `comment='#'` — skips NOAA comment lines at top of CSV
-2. `.replace(-999.99, np.nan)` — replaces missing-value sentinel with NaN
-3. `pd.to_datetime(...)` — builds proper datetime column from year/month/day
-4. `season_map` — engineers Spring/Summer/Autumn/Winter from month number
-5. `decade` — engineers "1980s", "1990s" etc. for grouped analysis
-6. `.rename(columns={...})` — shortens verbose NOAA column names
+| # | Chart Type | Insight |
+|---|-----------|---------|
+| 1 | Pie Chart | CO₂ share by season |
+| 2 | Histogram | Frequency of CO₂ readings |
+| 3 | Line Chart | Annual CO₂ trend over time |
+| 4 | Bar Chart | Average CO₂ per decade |
+| 5 | Scatter Plot | CO₂ vs increase since 1800 |
+| 6 | Box Plot | CO₂ spread per season |
+| 7 | Heatmap | Feature correlation matrix |
+| 8 | Area Chart | Cumulative CO₂ rise since 1800 |
+| 9 | Count Plot | Record count per season |
+| 10 | Violin Plot | CO₂ density distribution by decade |
 
 ---
 
-## Key Insights
+## 🔧 Filters
 
-- CO₂ rose from **~330 ppm (1974)** to **~432 ppm (2026)** — +102 ppm in 52 years
-- Clear **seasonal cycle** every year: spring peak, autumn dip (plant activity)
-- Rate of increase has **accelerated**: ~1 ppm/yr (1970s) → ~2.5 ppm/yr (2020s)
-- `year` and `average` have **r = 0.99** correlation — near-perfect linear trend
-- CO₂ crossed the **400 ppm milestone** in 2013 for the first time in human history
-- 20 weeks have **missing readings** (coded as -999.99 in raw data), all handled
+All filters are in the sidebar and dynamically update **all charts simultaneously**:
+
+- 📅 Year Range Slider
+- 🌿 Season Multi-Select
+- 📊 CO₂ Range Slider
+- 🗓 Decade Multi-Select
+- 🔍 Keyword Search
+- 🔄 Reset All Filters Button
 
 ---
 
-## Technical Stack
+## 🔍 Key Insights
 
-| Tool | Role |
-|------|------|
-| Python 3.x | Core language |
-| Pandas | Data loading, cleaning, filtering, aggregation |
-| NumPy | Numerical operations |
-| Matplotlib | Core chart creation |
-| Seaborn | Statistical visualizations & styling |
-| Streamlit | Interactive frontend dashboard |
+1. **Steady rise:** CO₂ has risen from ~333 ppm in 1974 to over 430 ppm in 2026 — an increase of nearly 100 ppm in 50 years.
+2. **Seasonal cycle:** CO₂ peaks in spring (May) and dips in autumn (September/October) due to Northern Hemisphere plant activity.
+3. **Accelerating growth:** Decade-over-decade comparisons show the rate of CO₂ increase has itself been increasing.
+4. **Strong correlation:** CO₂ ppm and increase-since-1800 are near-perfectly correlated (r ≈ 1.0), confirming the anthropogenic baseline.
+5. **Missing data pattern:** Early years (1970s) have more `-999.99` sentinel values, reflecting less complete measurement infrastructure.
